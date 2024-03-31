@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upload JSON File</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        position: relative;
+        width: 400px;
+        height: 170px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      input[type="file"] {
+        display: none;
+      }
+      .upload-button {
+        padding: 10px 20px;
+        background-color: #783737;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      .upload-button:hover {
+        background-color: #783737;
+      }
+      .upload-button:focus {
+        outline: none;
+      }
+      .file-name {
+        margin-top: 10px;
+        font-weight: bold;
+        display: none;
+        background-color: rgb(237, 237, 182); /* Highlight color */
+        padding: 5px; /* Add padding to highlight area */
+      }
+      #file-upload-label {
+        padding: 10px 20px;
+        background-color: #783737;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+      .upload-container {
+        display: flex;
+        justify-content: flex-start; /* Align items to the left */
+        align-items: flex-end; /* Align items to the bottom */
+        position: absolute; /* Position the container */
+        bottom: 140px; /* Align to the bottom of the page */
+        left: 100; /* Align to the left of the page */
+        right: -720px;
+        width: 100%; /* Full width */
+        padding-left: 20px; /* Add padding to separate from the left edge */
+        padding-bottom: 20px; /* Add padding to separate from the bottom edge */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" style="background-color: rgb(219, 225, 231)">
+      <h1>Upload a JSON File</h1>
+      <label id="file-upload-label" for="file-upload">Choose File</label>
+      <input id="file-upload" type="file" name="file" accept=".json" />
+      <div id="file-name" class="file-name"></div>
+    </div>
+    <div class="upload-container">
+      <button id="upload-btn" class="upload-button" onclick="uploadFile()">
+        Upload
+      </button>
+    </div>
+    <script>
+      document
+        .getElementById("file-upload")
+        .addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) {
+            document.getElementById("file-name").textContent = file.name;
+            document.getElementById("file-name").style.display = "block";
+          }
+        });
+      function uploadFile() {
+        // Perform any necessary actions before redirecting to screen2
+        window.location.href = "/screen2";
+      }
+    </script>
+  </body>
+</html>
