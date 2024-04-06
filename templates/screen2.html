@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Playground - Screen 2</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .container {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        border: 2px solid #333;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        height: 95vh;
+      }
+      .left-panel {
+        flex: 1;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-right: 2px solid #333;
+      }
+      .right-panel {
+        flex: 2;
+        padding: 20px;
+        background-color: #fff;
+        overflow-y: auto;
+      }
+      .chat-message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f1f1f1;
+      }
+      .user-message {
+        background-color: #f9f9f9;
+      }
+      .left-panel {
+        flex: 1;
+        padding-right: 20px;
+        overflow-y: auto; /* Allow vertical scrolling */
+      }
+      #system-prompt {
+        height: 100%; /* Fill until the bottom */
+        width: 100%;
+        box-sizing: border-box; /* Include padding and border in the height */
+      }
+      .right-panel {
+        flex: 1;
+      }
+      #user-prompt {
+        width: 100%;
+        height: 200px; /* Set the height to a larger value */
+        resize: vertical; /* Allow vertical resizing */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-panel">
+        <h2>System Prompt</h2>
+        <textarea id="system-prompt" rows="4" cols="50">
+{{ system_prompt }}</textarea
+        >
+      </div>
+      <div class="right-panel">
+        <div class="chat-container">
+          {% for message in chat_history %}
+          <div class="message-{{ message.role }}">{{ message.content }}</div>
+          {% endfor %}
+        </div>
+        <h2>User Prompt</h2>
+        <textarea id="user-prompt">{{ user_prompt }}</textarea>
+        <div class="chat-message">
+          Assistant Response: <span id="assistant-response"></span>
+        </div>
+        <button onclick="generateResponse()">Generate</button>
+      </div>
+    </div>
+    <script>
+      function generateResponse() {
+        var systemPrompt = document.getElementById("system-prompt").value;
+        var userPrompt = document.getElementById("user-prompt").value;
+
+        fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body:
+            "system_prompt=" +
+            encodeURIComponent(systemPrompt) +
+            "&user_prompt=" +
+            encodeURIComponent(userPrompt),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var assistantResponse = data.assistant_response;
+            var chatContainer = document.querySelector(".chat-container");
+            var userPromptElement = document.getElementById("user-prompt");
+
+            // Append user prompt and assistant response to chat container
+            chatContainer.innerHTML +=
+              '<div class="message-user">' + userPrompt + "</div>";
+            chatContainer.innerHTML +=
+              '<div class="message-assistant">' + assistantResponse + "</div>";
+
+            // Clear user prompt textarea
+            userPromptElement.value = "";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
