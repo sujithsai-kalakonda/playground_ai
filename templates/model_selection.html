@@ -81,8 +81,21 @@
       }
 
       function submitApiKey() {
-        // API Key submission logic here
+        var apiKeyInput = document.getElementById("api-key-input");
+        var apiKey = apiKeyInput.value;
+
+        if (apiKey) {
+          // Store the API key in sessionStorage (optional)
+          sessionStorage.setItem("api_key", apiKey);
+
+          // Redirect to the Flask route handling screen2.html
+          window.location.href = "/screen2";
+        } else {
+          alert("Please enter a valid API Key.");
+        }
       }
+
+      
 
       function uploadFile() {
         var fileInput = document.getElementById("json-file-input");
@@ -97,13 +110,15 @@
           .then((response) => {
             if (response.ok) {
               alert("File uploaded successfully.");
-              // Redirect or update UI as needed
+              // Redirect to the Flask route handling screen2.html
+              window.location.href = "/screen2";
             } else {
               alert("File upload failed.");
             }
           })
           .catch((error) => {
             console.error("Error:", error);
+            alert("Error uploading file.");
           });
       }
     </script>
